@@ -44,6 +44,7 @@ class ActivityUserList : BaseActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = userAdapter
         binding.layoutUserListShimmer.root.visibility = View.GONE
+        binding.layoutRetry.visibility = View.GONE
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             userViewModel.loadUserList()
@@ -66,11 +67,14 @@ class ActivityUserList : BaseActivity() {
                         binding.layoutUserListShimmer.root.visibility = View.VISIBLE
                         binding.layoutUserListShimmer.shimmerLayout.startShimmer()
                     }
+                    binding.layoutRetry.visibility = View.GONE
                 }
 
                 is ApiResult.Success -> {
+                    binding.swipeRefreshLayout.visibility = View.VISIBLE
                     binding.layoutUserListShimmer.shimmerLayout.stopShimmer()
                     binding.layoutUserListShimmer.root.visibility = View.GONE
+
                     userAdapter.updateList(result.data)
                     binding.swipeRefreshLayout.isRefreshing = false
                 }
@@ -78,11 +82,17 @@ class ActivityUserList : BaseActivity() {
                 is ApiResult.Error -> {
                     binding.layoutUserListShimmer.shimmerLayout.stopShimmer()
                     binding.layoutUserListShimmer.root.visibility = View.GONE
+                    binding.swipeRefreshLayout.visibility = View.GONE
+                    binding.layoutRetry.visibility = View.VISIBLE
                     binding.swipeRefreshLayout.isRefreshing = false
                     Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })
         userViewModel.loadUserList()
+
+        binding.btnRetry.setOnClickListener {
+            userViewModel.loadUserList()
+        }
     }
 }
