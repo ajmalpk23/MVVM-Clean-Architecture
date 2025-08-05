@@ -29,9 +29,8 @@ class UserDetailsViewModel @Inject constructor(private val postRepository: PostR
             }
 
             override fun onError(errorMessage: String) {
-
+                _postListLiveData.postValue(ApiResult.Error(errorMessage))
             }
-
         })
     }
 }

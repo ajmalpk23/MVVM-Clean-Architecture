@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.example.test.R
@@ -77,7 +78,9 @@ class ActivityUserDetails : BaseActivity() {
                 }
 
                 is ApiResult.Error -> {
-
+                    binding.layoutPostListShimmer.shimmerLayout.stopShimmer()
+                    binding.layoutPostListShimmer.root.visibility = View.GONE
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })

@@ -10,22 +10,23 @@ import org.json.JSONArray
 import org.json.JSONException
 import javax.inject.Inject
 
-class PostRepository @Inject constructor(): BaseRepository() {
+class PostRepository @Inject constructor() : BaseRepository() {
 
-    fun getPostList(userID: Long,callback: NetworkCallback) {
-        WebService(ApiEndPoint.POSTS.value.replace("userId","$userID")).get(object : NetworkCallback {
+    fun getPostList(userID: Long, callback: NetworkCallback) {
+        WebService(ApiEndPoint.POSTS.value.replace("userId", "$userID")).get(object :
+            NetworkCallback {
             override fun onSuccess(result: Any?) {
                 try {
                     (result as? String)?.let {
                         callback.onSuccess(handlePostListResponse(result))
                     }
                 } catch (e: JSONException) {
-
+                    callback.onError("Something went wrong")
                 }
             }
 
             override fun onError(errorMessage: String) {
-
+                callback.onError(errorMessage)
             }
 
             @Throws(JSONException::class)

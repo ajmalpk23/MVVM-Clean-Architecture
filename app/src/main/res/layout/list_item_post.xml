@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/item_user.xml -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    android:padding="16dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginTop="10dp"
+    android:padding="0dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
 
-        <LinearLayout
-            android:orientation="vertical"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/txt_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:text="Title"
+            android:textColor="#212121"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txt_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="18sp"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:textColor="#000" />
+        <TextView
+            android:id="@+id/txt_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:paddingTop="4dp"
+            android:text="Body content goes here"
+            android:textColor="#555555"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/txt_body"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="body"
-                android:textSize="14sp"
-                android:textColor="#777" />
-        </LinearLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

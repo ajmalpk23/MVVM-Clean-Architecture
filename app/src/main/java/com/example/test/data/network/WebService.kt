@@ -53,7 +53,7 @@ class WebService(apiEndPoint: String) {
             ?.build()
 
         if (this.request == null) {
-            callback?.onError("mesasge")
+            callback?.onError("Something went wrong")
         } else {
             request?.start()
 
@@ -154,13 +154,13 @@ class WebService(apiEndPoint: String) {
             Log.e("API", "Response: $responseBody")
             Log.e("API", "httpStatusCode: $httpStatusCode")
 
-            callback?.onError("mesasge")
+            callback?.onError("Something went wrong")
         }
 
         override fun onCanceled(request: UrlRequest?, info: UrlResponseInfo?) {
             super.onCanceled(request, info)
 
-            callback?.onError("mesasge")
+            callback?.onError("Something went wrong")
         }
     }
 }

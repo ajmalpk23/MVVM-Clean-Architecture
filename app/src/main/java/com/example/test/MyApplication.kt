@@ -1,6 +1,7 @@
 package com.example.test
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
@@ -16,6 +17,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         initializeCronetEngine()
     }
 

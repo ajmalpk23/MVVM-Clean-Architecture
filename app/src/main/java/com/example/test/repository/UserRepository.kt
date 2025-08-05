@@ -20,12 +20,12 @@ class UserRepository @Inject constructor(): BaseRepository() {
                         callback.onSuccess(handleUserListResponse(result))
                     }
                 } catch (e: JSONException) {
-
+                    callback.onError("Something went wrong")
                 }
             }
 
             override fun onError(errorMessage: String) {
-
+                callback.onError(errorMessage)
             }
 
             @Throws(JSONException::class)

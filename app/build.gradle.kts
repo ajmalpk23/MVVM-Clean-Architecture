@@ -67,4 +67,5 @@ dependencies {
     implementation(libs.cronet.embedded)
 
     implementation(libs.shimmer)
+    implementation(libs.androidx.swiperefreshlayout)
 }

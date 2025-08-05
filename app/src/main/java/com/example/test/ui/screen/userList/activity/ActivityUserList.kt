@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
@@ -34,58 +35,54 @@ class ActivityUserList : BaseActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        userAdapter = UserListAdapter(object : UserListAdapterInterface {
+        initView()
+    }
 
-            override fun onClickListener(user: User) {
-                val intent = Intent(this@ActivityUserList, ActivityUserDetails::class.java)
-                intent.putExtra("user",user)
-                startActivity(intent)
-            }
-
-        })
+    private fun initView() {
+        updateUserListUI()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = userAdapter
         binding.layoutUserListShimmer.root.visibility = View.GONE
 
-        userViewModel.userLiveData.observe(this, Observer { result ->
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            userViewModel.loadUserList()
+        }
+    }
+
+    private fun updateUserListUI() {
+        userAdapter = UserListAdapter(object : UserListAdapterInterface {
+            override fun onClickListener(user: User) {
+                val intent = Intent(this@ActivityUserList, ActivityUserDetails::class.java)
+                intent.putExtra("user", user)
+                startActivity(intent)
+            }
+        })
+
+        userViewModel.userListLiveData.observe(this, Observer { result ->
             when (result) {
                 is ApiResult.Loading -> {
-                    binding.layoutUserListShimmer.root.visibility = View.VISIBLE
-                    binding.layoutUserListShimmer.shimmerLayout.startShimmer()
+                    if (!binding.swipeRefreshLayout.isRefreshing) {
+                        binding.layoutUserListShimmer.root.visibility = View.VISIBLE
+                        binding.layoutUserListShimmer.shimmerLayout.startShimmer()
+                    }
                 }
 
                 is ApiResult.Success -> {
                     binding.layoutUserListShimmer.shimmerLayout.stopShimmer()
                     binding.layoutUserListShimmer.root.visibility = View.GONE
                     userAdapter.updateList(result.data)
+                    binding.swipeRefreshLayout.isRefreshing = false
                 }
 
                 is ApiResult.Error -> {
-
+                    binding.layoutUserListShimmer.shimmerLayout.stopShimmer()
+                    binding.layoutUserListShimmer.root.visibility = View.GONE
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })
-
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        userViewModel.loadUser()
-
+        userViewModel.loadUserList()
     }
 }

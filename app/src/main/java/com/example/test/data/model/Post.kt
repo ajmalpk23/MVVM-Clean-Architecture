@@ -18,6 +18,6 @@ data class Post(
     private fun parsePost(json: JSONObject) {
         id = json.optLong("id", id ?: 0)
         title = json.optString("title", title ?: "")
-        body = json.optString("username", body ?: "")
+        body = json.optString("body", body ?: "")
     }
 }
